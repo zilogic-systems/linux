@@ -135,6 +135,36 @@ struct platform_device pxa27x_device_udc = {
 	}
 };
 
+static struct resource pxa27x_pinctrl_resources[] = {
+	[0] = {
+		.start	= 0x40e00054,
+		.end	= 0x40e00073,
+		.flags	= IORESOURCE_MEM,
+	},
+	[1] = {
+		.start	= 0x40e0000c,
+		.end	= 0x40e00017,
+		.flags	= IORESOURCE_MEM,
+	},
+	[2] = {
+		.start	= 0x40e0010c,
+		.end	= 0x40e0010f,
+		.flags	= IORESOURCE_MEM,
+	},
+	[3] = {
+		.start	= 0x40f00020,
+		.end	= 0x40f0002f,
+		.flags	= IORESOURCE_MEM,
+	},
+};
+
+struct platform_device pxa27x_device_pinctrl = {
+	.name		= "pxa27x-pinctrl",
+	.id		= -1,
+	.resource	= pxa27x_pinctrl_resources,
+	.num_resources	= ARRAY_SIZE(pxa27x_pinctrl_resources),
+};
+
 #ifdef CONFIG_PXA3xx
 static struct resource pxa3xx_u2d_resources[] = {
 	[0] = {

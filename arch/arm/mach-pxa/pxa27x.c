@@ -277,6 +277,7 @@ static struct pxa_gpio_platform_data pxa27x_gpio_info __initdata = {
 };
 
 static struct platform_device *devices[] __initdata = {
+	&pxa27x_device_pinctrl,
 	&pxa27x_device_udc,
 	&pxa_device_pmu,
 	&pxa_device_i2s,
