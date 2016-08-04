@@ -12,6 +12,8 @@
  *  it under the terms of the GNU General Public License version 2 as
  *  published by the Free Software Foundation.
  */
+#include <linux/pinctrl/machine.h>
+#include <linux/pinctrl/pinconf-generic.h>
 #include <linux/gpio.h>
 #include <linux/gpio/machine.h>
 #include <linux/init.h>
@@ -122,6 +124,92 @@ static unsigned long mainstone_pin_config[] = {
 
 	/* GPIO */
 	GPIO1_GPIO | WAKEUP_ON_EDGE_BOTH,
+};
+
+#define PMGROUP(pin) #pin
+#define PMMUX(dev, pin, func)							\
+	PIN_MAP_MUX_GROUP(#dev, PINCTRL_STATE_DEFAULT, "pxa27x-pinctrl",	\
+			  "P" PMGROUP(pin), #func)
+
+static struct pinctrl_map pinmap[] __initdata = {
+	/* LCD - 16bpp Active TFT */
+	PMMUX(pxa2xx-fb, 58, LDD<0>),
+	PMMUX(pxa2xx-fb, 59, LDD<1>),
+	PMMUX(pxa2xx-fb, 60, LDD<2>),
+	PMMUX(pxa2xx-fb, 61, LDD<3>),
+	PMMUX(pxa2xx-fb, 62, LDD<4>),
+	PMMUX(pxa2xx-fb, 63, LDD<5>),
+	PMMUX(pxa2xx-fb, 64, LDD<6>),
+	PMMUX(pxa2xx-fb, 65, LDD<7>),
+	PMMUX(pxa2xx-fb, 66, LDD<8>),
+	PMMUX(pxa2xx-fb, 67, LDD<9>),
+	PMMUX(pxa2xx-fb, 68, LDD<10>),
+	PMMUX(pxa2xx-fb, 69, LDD<11>),
+	PMMUX(pxa2xx-fb, 70, LDD<12>),
+	PMMUX(pxa2xx-fb, 71, LDD<13>),
+	PMMUX(pxa2xx-fb, 72, LDD<14>),
+	PMMUX(pxa2xx-fb, 73, LDD<15>),
+	PMMUX(pxa2xx-fb, 74, L_FCLK_RD),
+	PMMUX(pxa2xx-fb, 75, L_LCLK_A0),
+	PMMUX(pxa2xx-fb, 76, L_PCLK_WR),
+	PMMUX(pxa2xx-fb, 77, L_BIAS),
+	PMMUX(pxa27x-pwm.0, 16, PWM_OUT<0>),
+
+	/* MMC */
+	PMMUX(pxa2xx-mci.0, 32, MMCLK),
+	PMMUX(pxa2xx-mci.0, 112, MMCMD),
+	PMMUX(pxa2xx-mci.0, 92, MMDAT<0>),
+	PMMUX(pxa2xx-mci.0, 109, MMDAT<1>),
+	PMMUX(pxa2xx-mci.0, 110, MMDAT<2>),
+	PMMUX(pxa2xx-mci.0, 111, MMDAT<3>),
+
+	/* USB Host Port 1 */
+	PMMUX(pxa27x-ohci, 88, USBHPWR<1>),
+	PMMUX(pxa27x-ohci, 89, USBHPEN<1>),
+
+	/* PC Card */
+	PMMUX(pxa2xx-pcmcia, 48, nPOE),
+	PMMUX(pxa2xx-pcmcia, 49, nPWE),
+	PMMUX(pxa2xx-pcmcia, 50, nPIOR),
+	PMMUX(pxa2xx-pcmcia, 51, nPIOW),
+	PMMUX(pxa2xx-pcmcia, 85, nPCE<1>),
+	PMMUX(pxa2xx-pcmcia, 54, nPCE<2>),
+	PMMUX(pxa2xx-pcmcia, 79, PSKTSEL),
+	PMMUX(pxa2xx-pcmcia, 55, nPREG),
+	PMMUX(pxa2xx-pcmcia, 56, nPWAIT),
+	PMMUX(pxa2xx-pcmcia, 57, nIOS16),
+
+	/* AC97 */
+	PMMUX(pxa2xx-ac97, 28, AC97_BITCLK),
+	PMMUX(pxa2xx-ac97, 29, AC97_SDATA_IN_0),
+	PMMUX(pxa2xx-ac97, 30, AC97_SDATA_OUT),
+	PMMUX(pxa2xx-ac97, 31, AC97_SYNC),
+	PMMUX(pxa2xx-ac97, 45, AC97_SYSCLK),
+
+	/* Keypad */
+	PMMUX(pxa27x-keypad, 93, KP_DKIN<0>),
+	PMMUX(pxa27x-keypad, 94, KP_DKIN<1>),
+	PMMUX(pxa27x-keypad, 95, KP_DKIN<2>),
+	PMMUX(pxa27x-keypad, 100, KP_MKIN<0>),
+	PMMUX(pxa27x-keypad, 101, KP_MKIN<1>),
+	PMMUX(pxa27x-keypad, 102, KP_MKIN<2>),
+	PMMUX(pxa27x-keypad, 97, KP_MKIN<3>),
+	PMMUX(pxa27x-keypad, 98, KP_MKIN<4>),
+	PMMUX(pxa27x-keypad, 99, KP_MKIN<5>),
+	PMMUX(pxa27x-keypad, 103, KP_MKOUT<0>),
+	PMMUX(pxa27x-keypad, 104, KP_MKOUT<1>),
+	PMMUX(pxa27x-keypad, 105, KP_MKOUT<2>),
+	PMMUX(pxa27x-keypad, 106, KP_MKOUT<3>),
+	PMMUX(pxa27x-keypad, 107, KP_MKOUT<4>),
+	PMMUX(pxa27x-keypad, 108, KP_MKOUT<5>),
+	PMMUX(pxa27x-keypad, 96, KP_MKOUT<6>),
+
+	/* I2C */
+	PMMUX(pxa2xx-i2c.0, 117, SCL),
+	PMMUX(pxa2xx-i2c.0, 118, SDA),
+
+	/* GPIO */
+	PMMUX(gpio-keys, 1, gpio_in),
 };
 
 static struct resource smc91x_resources[] = {
@@ -510,7 +598,7 @@ static void __init mainstone_init(void)
 {
 	int SW7 = 0;  /* FIXME: get from SCR (Mst doc section 3.2.1.1) */
 
-	pxa2xx_mfp_config(ARRAY_AND_SIZE(mainstone_pin_config));
+	pinctrl_register_mappings(ARRAY_AND_SIZE(pinmap));
 
 	pxa_set_ffuart_info(NULL);
 	pxa_set_btuart_info(NULL);
