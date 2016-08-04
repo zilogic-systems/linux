@@ -20,6 +20,7 @@
 #include <linux/pinctrl/pinctrl.h>
 #include <linux/platform_device.h>
 #include <linux/slab.h>
+#include <linux/gpio.h>
 
 #include "../pinctrl-utils.h"
 #include "pinctrl-pxa2xx.h"
@@ -374,12 +375,19 @@ static int pxa2xx_build_state(struct pxa_pinctrl *pctl,
 	return 0;
 }
 
+static int match_name(struct gpio_chip *chip, void *data)
+{
+	const char *name = data;
+	return !strcmp(chip->label, name);
+}
+
 int pxa2xx_pinctrl_init(struct platform_device *pdev,
 			const struct pxa_desc_pin *ppins, int npins,
 			void __iomem *base_gafr[], void __iomem *base_gpdr[],
 			void __iomem *base_pgsr[])
 {
 	struct pxa_pinctrl *pctl;
+	struct gpio_chip *gc;
 	int ret, i, maxpin = 0;
 
 	for (i = 0; i < npins; i++)
@@ -423,6 +431,18 @@ int pxa2xx_pinctrl_init(struct platform_device *pdev,
 	}
 
 	dev_info(&pdev->dev, "initialized pxa2xx pinctrl driver\n");
+
+	gc = gpiochip_find("gpio-pxa", match_name);
+	if (gc == NULL) {
+		pr_err("gpiochip_find failed\n");
+		return -EPROBE_DEFER;
+	}
+
+	ret = gpiochip_add_pin_range(gc, "pxa27x-pinctrl", 0, 0, npins);
+	if (ret) {
+		pr_err("gpiochip_add_pin_range: %d", ret);
+		return ret;
+	}
 
 	return 0;
 }
