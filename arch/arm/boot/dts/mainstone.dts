@@ -1,0 +1,58 @@
+/*
+ * Copyright (C) 2016 Zilogic Systems - http://www.zilogic.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+/dts-v1/;
+
+#include "pxa27x.dtsi"
+
+/ {
+	model = "Intel HCDDBBVA0 Development Platform";
+	compatible = "intel,mainstone", "marvell,pxa270";
+
+	/* FIXME: Place holder for real regulator. */
+	vmmc: fixedregulator@0 {
+		compatible = "regulator-fixed";
+		regulator-name = "vmmc";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-boot-on;
+	};
+
+	pxabus {
+		pxai2c1: i2c@40301680 {
+			status = "okay";
+		};
+
+		ffuart: uart@40100000 {
+			status = "okay";
+		};
+
+		mmc0: mmc@41100000 {
+			vmmc-supply = <&vmmc>;
+			status = "okay";
+		};
+
+		ficp: ficp@4070000 {
+			compatible = "mrvl,pxa2xx-ir";
+			reg = <0x40800000 0x20 0x40700000 0x30>;
+			interrupts = <20>, <19>;
+			/* FIXME: Not sure what the zero means here. */
+			dmas = <&pdma 17 0>, <&pdma 18 0>;
+			clocks = <&clks CLK_STUART>, <&clks CLK_FICP>;
+			clock-names = "UARTCLK", "FICPCLK";
+			status = "okay";
+		};
+
+		/* lcd-controller@40500000 { */
+		/* 	status = "okay"; */
+		/* }; */
+
+		/* keypad: keypad@41500000 { */
+		/* 	status = "okay"; */
+		/* }; */
+	};
+};
