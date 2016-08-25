@@ -622,6 +622,8 @@ static int pxamci_of_init(struct platform_device *pdev)
 	if (of_property_read_u32(np, "pxa-mmc,detect-delay-ms", &tmp) == 0)
 		pdata->detect_delay_ms = tmp;
 
+	pdata->ocr_mask = MMC_VDD_32_33 | MMC_VDD_33_34;
+
         pdev->dev.platform_data = pdata;
 
         return 0;
