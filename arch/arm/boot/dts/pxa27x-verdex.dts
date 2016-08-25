@@ -1,0 +1,143 @@
+/*
+ * Copyright (C) 2016 Zilogic Systems - http://www.zilogic.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+/dts-v1/;
+
+#include "pxa27x.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	model = "Gumstix Verdex Platform";
+	compatible = "gumstix,verdex", "marvell,pxa270";
+
+	memory {
+		reg = <0xA0000000 0x10000000>;
+	};
+
+	display@0 {
+		display-timings {
+			native-mode = <&timing0>;
+			timing0: 640x480 {
+				clock-frequency = <20000000>;
+				hactive = <640>;
+				vactive = <480>;
+				hfront-porch = <20>;
+				hback-porch = <8>;
+				hsync-len = <4>;
+				vback-porch = <1>;
+				vfront-porch = <10>;
+				vsync-len = <3>;
+				hsync-active = <1>;
+				vsync-active = <1>;
+			};
+		};
+			
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&lcdc_out>;
+			};
+		};
+	};
+
+	pxabus {
+		pxai2c1: i2c@40301680 {
+			status = "okay";
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&i2c_pins>;
+
+			tmp105@10 {
+				compatible = "tmp105";
+				reg = <0x10>;
+			};
+
+			zlcd@20 {
+				compatible = "zlcd";
+				reg = <0x20>;
+			};
+
+			zkey@30 {
+				compatible = "zkey";
+				reg = <0x30>;
+				interrupts-extended = <&gpio 19 IRQ_TYPE_EDGE_RISING>;
+			};
+
+		};
+
+		ffuart: uart@40100000 {
+			status = "okay";
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&ffuart_pins>;
+		};
+
+		mmc0: mmc@41100000 {
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&mmc_pins>;
+		};
+
+		lcd-controller@40500000 {
+			compatible = "marvell,pxa270-lcdc";
+			reg = <0x44000000 0x10000>;
+			interrupts = <17>;
+			clocks = <&clks CLK_LCD>;			
+			status = "okay";
+
+			port {
+				lcdc_out: endpoint {
+					remote-endpoint = <&panel_in>;
+					bus-width = <16>;
+				};
+			};
+		};
+
+		mac: ethernet@04000300 {
+			compatible = "smsc,lan91c94";
+			reg = <0x04000300 0xffd00>;
+			interrupts-extended = <&gpio 99 IRQ_TYPE_EDGE_RISING>;
+		};
+
+		pxa27x_ohci: usb@4c000000 {
+			status = "okay";
+			marvell,enable-port1;
+			marvell,port-mode = <2>;
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&usbh_pins>;
+		};
+
+		nor_flash@00000000 {
+			compatible = "cfi-flash";
+			reg = <0x00000000 0x01000000>;
+			linux,mtd-name = "physmap-flash.0";
+			bank-width = <2>;
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			bootloader@0 {
+				label = "bootloader";
+				reg = <0x00000 0x40000>;
+			};
+
+			bootenv@40000 {
+				label = "bootenv";
+				reg = <0x40000 0x20000>;
+			};
+
+			kernel@60000 {
+				label = "kernel";
+				reg = <0x60000 0x300000>;
+			};
+
+			rootfs@360000 {
+				label = "rootfs";
+				reg = <0x360000 0xCA0000>;
+			};
+		};
+	};
+};

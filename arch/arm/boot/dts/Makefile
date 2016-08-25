@@ -255,6 +255,8 @@ dtb-$(CONFIG_ARCH_MMP) += \
 	pxa168-aspenite.dtb \
 	pxa910-dkb.dtb \
 	mmp2-brownstone.dtb
+dtb-$(CONFIG_ARCH_PXA) += \
+	pxa27x-verdex.dtb
 dtb-$(CONFIG_MACH_MESON8B) += \
 	meson8b-mxq.dtb \
 	meson8b-odroidc1.dtb
