@@ -24,6 +24,7 @@
 
 		gpio: gpio@40e00000 {
 			compatible = "intel,pxa27x-gpio";
+			gpio-ranges = <&pinctrl 0 0 128>;
 			clocks = <&clks CLK_NONE>;
 		};
 
