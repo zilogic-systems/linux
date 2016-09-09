@@ -129,5 +129,75 @@
 				reg = <0x360000 0xCA0000>;
 			};
 		};
+
+		pinctrl: pinctrl@40e00000 {
+			usbh_pins: usbh {
+				mux_p88 {
+					pins = "P88";
+					function = "USBHPWR<1>";
+				};
+
+				mux_p89 {
+					pins = "P89";
+					function = "USBHPEN<1>";
+				};
+			};
+
+			ffuart_pins: ff {
+				mux_p19 {
+					pins = "P34";
+					function = "FFRXD";
+				};
+
+				mux_p37 {
+					pins = "P39";
+					function = "FFTXD";
+				};
+			};
+
+			i2c_pins: i2c {
+				mux_p117 {
+					pins = "P117";
+					function = "SCL";
+				};
+
+				mux_p118 {
+					pins = "P118";
+					function = "SDA";
+				};
+			};
+
+			mmc_pins: mmc {
+				mux_p32 {
+					pins = "P32";
+					function = "MMCLK";
+				};
+
+				mux_p112 {
+					pins = "P112";
+					function = "MMCMD";
+				};
+
+				mux_p92 {
+					pins = "P92";
+					function = "MMDAT<0>";
+				};
+
+				mux_p109 {
+					pins = "P109";
+					function = "MMDAT<1>";
+				};
+
+				mux_p110 {
+					pins = "P110";
+					function = "MMDAT<2>";
+				};
+
+				mux_p111 {
+					pins = "P111";
+					function = "MMDAT<3>";
+				};
+			};
+		};
 	};
 };
