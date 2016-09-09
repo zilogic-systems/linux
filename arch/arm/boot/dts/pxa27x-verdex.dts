@@ -50,16 +50,6 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&i2c_pins>;
 
-			tmp105@10 {
-				compatible = "tmp105";
-				reg = <0x10>;
-			};
-
-			zlcd@20 {
-				compatible = "zlcd";
-				reg = <0x20>;
-			};
-
 			zkey@30 {
 				compatible = "zkey";
 				reg = <0x30>;
