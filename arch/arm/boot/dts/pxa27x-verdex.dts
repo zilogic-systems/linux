@@ -101,34 +101,34 @@
 			pinctrl-0 = <&usbh_pins>;
 		};
 
-		nor_flash@00000000 {
-			compatible = "cfi-flash";
-			reg = <0x00000000 0x01000000>;
-			linux,mtd-name = "physmap-flash.0";
-			bank-width = <2>;
-			#address-cells = <1>;
-			#size-cells = <1>;
+		flash@00000000 {
+                        compatible = "cfi-flash";
+                        reg = <0x00000000 0x02000000>;
+                        linux,mtd-name = "physmap-flash.0";
+                        bank-width = <2>;
+                        #address-cells = <1>;
+                        #size-cells = <1>;
 
-			bootloader@0 {
-				label = "bootloader";
-				reg = <0x00000 0x40000>;
-			};
+                        bootloader@0 {
+                                label = "bootloader";
+                                reg = <0x00000 0x40000>;
+                        };
 
-			bootenv@40000 {
-				label = "bootenv";
-				reg = <0x40000 0x20000>;
-			};
+                        bootenv@80000 {
+                                label = "bootenv";
+                                reg = <0x80000 0x40000>;
+                        };
 
-			kernel@60000 {
-				label = "kernel";
-				reg = <0x60000 0x300000>;
-			};
+                        kernel@60000 {
+                                label = "kernel";
+                                reg = <0xC0000 0x400000>;
+                        };
 
-			rootfs@360000 {
-				label = "rootfs";
-				reg = <0x360000 0xCA0000>;
-			};
-		};
+                        rootfs@360000 {
+                                label = "rootfs";
+                                reg = <0x4C0000 0x1B40000>;
+                        };
+                };
 
 		pinctrl: pinctrl@40e00000 {
 			usbh_pins: usbh {
